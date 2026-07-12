@@ -559,6 +559,8 @@ const state = {
   answers: new Array(questions.length).fill(null)
 };
 
+let autoAdvanceTimer = null;
+
 const shopUrl = 'https://theresanguyenspeaks.com/shop';
 
 const quizEl = document.getElementById('quiz');
@@ -669,6 +671,8 @@ quizEl.addEventListener('click', (e) => {
   const action = btn.dataset.action;
   if (!action) return;
 
+  clearTimeout(autoAdvanceTimer);
+
   if (action === 'back' && state.current > 0) {
     state.current -= 1;
     renderQuiz();
@@ -712,11 +716,24 @@ quizEl.addEventListener('click', (e) => {
   btn.classList.add('selected');
   const nextBtn = quizEl.querySelector('[data-action="next"]');
   if (nextBtn) nextBtn.disabled = false;
+  // auto-advance so the quiz works even when the Continue button is
+  // below the fold inside a fixed-height embed
+  state.answers[state.current] = parseInt(btn.dataset.opt, 10);
+  clearTimeout(autoAdvanceTimer);
+  autoAdvanceTimer = setTimeout(() => {
+    if (state.current < questions.length - 1) {
+      state.current += 1;
+      renderQuiz();
+    } else {
+      showResults();
+    }
+  }, 400);
 });
 
 resultsEl.addEventListener('click', (e) => {
   const btn = e.target.closest('.restart-btn');
   if (!btn) return;
+  clearTimeout(autoAdvanceTimer);
   state.current = 0;
   state.answers = new Array(questions.length).fill(null);
   resultsEl.innerHTML = '';
