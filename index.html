@@ -311,8 +311,41 @@
   }
 
   @media (max-width: 640px) {
+    .container {
+      padding: 8px 14px 20px;
+    }
+    header {
+      padding: 12px 0 10px;
+      margin-bottom: 14px;
+    }
+    header h1 {
+      margin-bottom: 6px;
+    }
+    header p {
+      font-size: 0.88rem;
+    }
+    .progress-text {
+      margin-bottom: 12px;
+    }
+    .question {
+      margin-bottom: 10px;
+    }
+    .options {
+      gap: 8px;
+    }
+    .option-btn {
+      padding: 10px 14px;
+    }
     .nav-buttons {
       flex-wrap: wrap;
+      margin-top: 10px;
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(243, 239, 233, 0) 0%, #f3efe9 22%);
+      padding: 10px 0 6px;
+    }
+    .btn {
+      padding: 10px 16px;
     }
     .btn-secondary {
       order: 2;
@@ -557,13 +590,13 @@ function renderQuiz() {
             </button>
           `).join('')}
         </div>
-        <div class="nav-buttons">
-          <button class="btn btn-secondary" data-action="back">← Back</button>
-          <button class="btn btn-ghost" data-action="skip">Skip</button>
-          <button class="btn btn-primary" data-action="next" ${selected === null ? 'disabled' : ''}>
-            ${state.current === questions.length - 1 ? 'See My Results' : 'Continue →'}
-          </button>
-        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" data-action="back">← Back</button>
+        <button class="btn btn-ghost" data-action="skip">Skip</button>
+        <button class="btn btn-primary" data-action="next" ${selected === null ? 'disabled' : ''}>
+          ${state.current === questions.length - 1 ? 'See My Results' : 'Continue →'}
+        </button>
       </div>
     `;
 
