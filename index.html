@@ -608,10 +608,6 @@ function renderQuiz() {
       </div>
       <div class="nav-buttons">
         <button class="btn btn-secondary" data-action="back">← Back</button>
-        <button class="btn btn-ghost" data-action="skip">Skip</button>
-        <button class="btn btn-primary" data-action="next" ${selected === null ? 'disabled' : ''}>
-          ${state.current === questions.length - 1 ? 'See My Results' : 'Continue →'}
-        </button>
       </div>
     `;
 
@@ -692,27 +688,6 @@ quizEl.addEventListener('click', (e) => {
     return;
   }
 
-  if (action === 'next') {
-    const selected = quizEl.querySelector('.option-btn.selected');
-    state.answers[state.current] = selected ? parseInt(selected.dataset.opt, 10) : null;
-    if (state.current < questions.length - 1) {
-      state.current += 1;
-      renderQuiz();
-    } else {
-      showResults();
-    }
-    return;
-  }
-
-  if (action === 'skip') {
-    if (state.current < questions.length - 1) {
-      state.answers[state.current] = null;
-      state.current += 1;
-      renderQuiz();
-    }
-    return;
-  }
-
   if (action === 'restart') {
     state.current = 0;
     state.answers = new Array(questions.length).fill(null);
@@ -727,10 +702,7 @@ quizEl.addEventListener('click', (e) => {
   if (!btn) return;
   quizEl.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
-  const nextBtn = quizEl.querySelector('[data-action="next"]');
-  if (nextBtn) nextBtn.disabled = false;
-  // auto-advance so the quiz works even when the Continue button is
-  // below the fold inside a fixed-height embed
+  // tapping an answer saves it and advances to the next question
   state.answers[state.current] = parseInt(btn.dataset.opt, 10);
   clearTimeout(autoAdvanceTimer);
   autoAdvanceTimer = setTimeout(() => {
